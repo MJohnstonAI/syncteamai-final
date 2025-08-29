@@ -19,7 +19,6 @@ export async function chooseFreePlan(prevState: FormState, formData: FormData): 
       return { error: "Invalid security mode selected." };
     }
 
-    // Await the client to ensure it's ready
     const client = await clerkClient();
     await client.users.updateUserMetadata(user.id, {
       publicMetadata: {
@@ -28,12 +27,15 @@ export async function chooseFreePlan(prevState: FormState, formData: FormData): 
       },
     });
 
-  } catch (err: any) {
-    // Log the actual error to the terminal for debugging
-    console.error("Error choosing free plan:", err.message);
+  } catch (err) { // --- This is the corrected part ---
+    // We check if the error is an object with a message property
+    if (err instanceof Error) {
+      console.error("Error choosing free plan:", err.message);
+    } else {
+      console.error("An unknown error occurred:", err);
+    }
     return { error: "Something went wrong. Please try again." };
   }
 
-  // This must be called outside the try/catch block
   redirect("/dashboard");
 }
