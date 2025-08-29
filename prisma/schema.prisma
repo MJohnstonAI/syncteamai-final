@@ -1,0 +1,111 @@
+// This is the complete schema for SyncTeamAI v1.1
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// ENUMS
+enum SecurityMode {
+  VAULT
+  SPOTLIGHT
+}
+enum PlanType {
+  FREE
+  MONTHLY
+}
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELED
+  INCOMPLETE
+}
+enum SenderType {
+  USER
+  AI
+}
+
+// MODELS
+model User {
+  id             String        @id @default(cuid())
+  email          String        @unique
+  name           String?
+  hashedPassword String
+  securityMode   SecurityMode  @default(VAULT)
+  isAdmin        Boolean       @default(false)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  subscription   Subscription?
+  projects       Project[]
+  promptGroups   PromptGroup[]
+  savedPrompts   SavedPrompt[]
+  passwordResetToken PasswordResetToken?
+}
+
+model Subscription {
+  id                   String             @id @default(cuid())
+  userId               String             @unique
+  user                 User               @relation(fields: [userId], references: [id])
+  plan                 PlanType           @default(FREE)
+  status               SubscriptionStatus @default(INCOMPLETE)
+  paypalSubscriptionId String?            @unique
+  startDate            DateTime?
+  endDate              DateTime?
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+}
+
+model Project {
+  id        String    @id @default(cuid())
+  name      String
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+  isPublic  Boolean   @default(false)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  messages  Message[]
+}
+
+model Message {
+  id         String     @id @default(cuid())
+  content    String     @db.Text
+  senderType SenderType
+  senderName String
+  createdAt  DateTime   @default(now())
+  projectId  String
+  project    Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model PromptGroup {
+  id        String        @id @default(cuid())
+  name      String
+  userId    String
+  user      User          @relation(fields: [userId], references: [id])
+  createdAt DateTime      @default(now())
+  prompts   SavedPrompt[]
+
+  @@unique([userId, name])
+}
+
+model SavedPrompt {
+  id        String      @id @default(cuid())
+  title     String
+  script    String      @db.Text
+  userId    String
+  user      User        @relation(fields: [userId], references: [id])
+  groupId   String
+  group     PromptGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  createdAt DateTime    @default(now())
+}
+// NEW: Model for storing password reset tokens
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  expires   DateTime
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
