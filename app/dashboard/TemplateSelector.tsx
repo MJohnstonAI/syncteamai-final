@@ -1,4 +1,4 @@
-import { demoTemplates, type DemoTemplate } from "app/dashboard/templates";
+import { demoTemplates, type DemoTemplate } from "./templates";
 
 // This component receives a function to call when a template is selected
 interface TemplateSelectorProps {

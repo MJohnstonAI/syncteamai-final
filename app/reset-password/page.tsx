@@ -1,8 +1,7 @@
 "use client";
 
-// --- MODIFIED: Import 'useActionState' from React ---
 import { useActionState } from 'react';
-import { resetPassword } from "app/reset-password/actions";
+import { resetPassword } from "./actions"; // Corrected path
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
@@ -12,22 +11,17 @@ const initialState = {
 };
 
 export default function ResetPasswordPage() {
-  // --- MODIFIED: Changed 'useFormState' to 'useActionState' ---
   const [state, formAction] = useActionState(resetPassword, initialState);
-  
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
 
   return (
     <main className="flex min-h-screen w-full items-center justify-center p-4">
       <div className="w-full max-w-2xl space-y-8 rounded-lg border border-gray-700 bg-black/40 p-10 shadow-lg shadow-electric-blue/20">
-        
         {token ? (
-          // Set New Password Form
           <div>
             <h1 className="mb-4 text-center text-5xl font-bold">Set a New Password</h1>
             <form action={formAction} className="space-y-8 mt-8">
-              {/* ... form content ... */}
               <input type="hidden" name="token" value={token} />
               <div>
                 <label htmlFor="password" className="block text-xl font-bold text-gray-200">New Password</label>
@@ -50,14 +44,12 @@ export default function ResetPasswordPage() {
             </form>
           </div>
         ) : (
-          // Request Reset Link Form
           <div>
             <h1 className="mb-4 text-center text-5xl font-bold">Forgot Your Password?</h1>
             <p className="text-center text-lg text-gray-400">
               Enter the email address associated with your account, and we will send a link to reset it.
             </p>
             <form action={formAction} className="space-y-8 mt-8">
-              {/* ... form content ... */}
               <div>
                 <label htmlFor="email" className="block text-xl font-bold text-gray-200">Email</label>
                 <input id="email" name="email" type="email" required className="mt-2 w-full rounded-lg border border-gray-500 bg-gray-900 p-5 text-2xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-electric-blue" placeholder="Enter your email" />

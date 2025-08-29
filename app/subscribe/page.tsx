@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useActionState } from 'react';
-import { chooseFreePlan } from "app/subscribe/actions";
+import { chooseFreePlan } from "./actions"; // Corrected path
 import Link from 'next/link';
 
 type SecurityMode = 'VAULT' | 'SPOTLIGHT';
@@ -13,11 +13,8 @@ export default function SubscribePage() {
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen w-full bg-gradient-to-br from-[#111827] to-[#0c0a1d] text-white p-8">
-      
       <form action={formAction} className="w-full flex flex-col items-center">
         <input type="hidden" name="securityMode" value={selectedMode} />
-
-        {/* Step 1: Choose Security Mode */}
         <div className="w-full max-w-3xl mb-12 text-center">
           <h1 className="text-3xl font-bold mb-4">First, Choose Your Security Model</h1>
           <p className="text-gray-400 mb-6">This choice determines the default privacy of your projects.</p>
@@ -38,13 +35,9 @@ export default function SubscribePage() {
             </div>
           </div>
         </div>
-
-        {/* Step 2: Choose Your Plan */}
         <div className="w-full max-w-3xl text-center">
           <h2 className="text-3xl font-bold mb-10">Now, Choose Your Plan</h2>
           <div className="flex flex-wrap justify-center gap-8">
-            
-            {/* Paid Plan Option */}
             <div className="bg-black/40 border border-gray-700 rounded-lg p-8 w-full max-w-sm flex flex-col">
               <h3 className="text-2xl font-semibold mb-4 text-electric-blue">Full Access Plan</h3>
               <div className="flex items-baseline mb-6"><span className="text-4xl font-bold">$39</span><span className="text-gray-400 ml-1">/ month</span></div>
@@ -57,8 +50,6 @@ export default function SubscribePage() {
                 Proceed to Payment
               </Link>
             </div>
-
-            {/* Free Plan Option */}
             <div className="bg-black/20 border border-gray-700 rounded-lg p-8 w-full max-w-sm flex flex-col">
               <h3 className="text-2xl font-semibold mb-4 text-gray-300">Free Demo Plan</h3>
               <div className="flex items-baseline mb-6"><span className="text-4xl font-bold">$0</span></div>

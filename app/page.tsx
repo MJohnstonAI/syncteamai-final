@@ -26,21 +26,20 @@ export default function LandingPage() {
           Watch them collaborate in real-time.
         </p>
         <div className="mt-8">
-<Link
-  href="/login"
-  className="
-    rounded-md bg-blue-500 px-6 py-3 text-lg font-semibold text-white /* Changed default to bg-blue-500 */
-    shadow-lg 
-    transition-all duration-150 
-    hover:bg-blue-600 /* Added a slightly darker hover state */
-    focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-electric-blue
-    
-    /* --- Pressed effect --- */
-    active:translate-y-px active:shadow-inner active:bg-blue-700 /* Darkens on press */
-  "
->
-  Start Building Your AI Council
-</Link>
+          <Link
+            href="/login" // This is the line that directs the button to the Clerk login page.
+            className="
+              rounded-md bg-blue-500 px-6 py-3 text-lg font-semibold text-white
+              shadow-lg 
+              transition-all duration-150 
+              hover:bg-blue-600 
+              focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-electric-blue
+              
+              active:translate-y-px active:shadow-inner active:bg-blue-700
+            "
+          >
+            Start Building Your AI Council
+          </Link>
         </div>
       </div>
 

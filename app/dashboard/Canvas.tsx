@@ -1,25 +1,31 @@
 "use client";
 
 import { useState } from 'react';
-import TemplateSelector from "app/dashboard/TemplateSelector";
-import { type DemoTemplate } from "app/dashboard/templates";
+// --- THIS IS THE CORRECTED PART ---
+import TemplateSelector from "./TemplateSelector";
+import { type DemoTemplate } from "./templates";
 
 // Define the props that the Canvas component will accept
 interface CanvasProps {
   userPlan: string;
-  securityMode: string;
 }
 
 export default function Canvas({ userPlan }: CanvasProps) {
   const [activeTemplate, setActiveTemplate] = useState<DemoTemplate | null>(null);
 
-  // If a free user has selected a template, show the demo.
-  if (userPlan === 'FREE' && activeTemplate) {
+  // --- FREE USER LOGIC ---
+  if (userPlan === 'FREE') {
+    // If a free user has not yet selected a template, show the selector.
+    if (!activeTemplate) {
+      return <TemplateSelector onSelectTemplate={setActiveTemplate} />;
+    }
+    
+    // If a free user HAS selected a template, show the demo canvas.
     return (
       <section className="flex h-full flex-grow flex-col p-6">
         <div className="flex-grow overflow-y-auto">
           <h1 className="text-2xl font-bold text-white">{activeTemplate.title}</h1>
-          <p className="text-gray-400 mt-2">The full, interactive demo script will be displayed here.</p>
+          <p className="text-gray-400 mt-2">The interactive demo script will run here.</p>
         </div>
         <div className="mt-4">
           <input
@@ -32,12 +38,8 @@ export default function Canvas({ userPlan }: CanvasProps) {
     );
   }
 
-  // If the user is on a free plan and has NOT selected a template, show the selector.
-  if (userPlan === 'FREE') {
-    return <TemplateSelector onSelectTemplate={setActiveTemplate} />;
-  }
-
-  // Otherwise (if the user is on a paid plan), show the full, empty canvas.
+  // --- PAID USER LOGIC ---
+  // If the user is on a paid plan, show the full, empty canvas.
   return (
     <section className="flex h-full flex-grow flex-col p-6">
       <div className="flex-grow overflow-y-auto">

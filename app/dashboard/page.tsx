@@ -1,22 +1,23 @@
 import { currentUser } from "@clerk/nextjs/server";
-import Canvas from "app/dashboard/Canvas";
-import Sidebar from "app/dashboard/Sidebar";
+import { redirect } from "next/navigation";
+import Canvas from "./Canvas"; // Corrected path
+import Sidebar from "./Sidebar"; // Corrected path
 
 export default async function DashboardPage() {
   const user = await currentUser();
+  if (!user) {
+    redirect('/');
+  }
 
-  // We get the user's plan and security mode from the metadata we saved.
-  // We provide default values in case they haven't been set yet.
-  const plan = user?.publicMetadata?.plan || "FREE";
-  const securityMode = user?.publicMetadata?.securityMode || "VAULT";
+  const plan = user.publicMetadata?.plan as string | undefined;
+  if (!plan) {
+    redirect('/subscribe');
+  }
 
   return (
     <main className="flex h-screen w-full">
       <Sidebar />
-      <Canvas
-        userPlan={plan as string}
-        securityMode={securityMode as string}
-      />
+      <Canvas userPlan={plan} />
     </main>
   );
 }
