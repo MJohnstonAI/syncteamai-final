@@ -27,13 +27,13 @@ export async function chooseFreePlan(prevState: FormState, formData: FormData): 
       },
     });
 
-  } catch (err) { // --- This is the corrected part ---
-    // We check if the error is an object with a message property
+  } catch (err: unknown) { // --- This is the corrected part ---
+    // We explicitly type 'err' as 'unknown' for maximum type safety
+    let errorMessage = "An unknown error occurred.";
     if (err instanceof Error) {
-      console.error("Error choosing free plan:", err.message);
-    } else {
-      console.error("An unknown error occurred:", err);
+      errorMessage = err.message;
     }
+    console.error("Error choosing free plan:", errorMessage);
     return { error: "Something went wrong. Please try again." };
   }
 
